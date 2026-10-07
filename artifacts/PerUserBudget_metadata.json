@@ -1,0 +1,115 @@
+{
+	"compiler": {
+		"version": "0.8.34+commit.80d5c536"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "limits",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "cap",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "spent",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					}
+				],
+				"name": "remaining",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "capValue",
+						"type": "uint256"
+					}
+				],
+				"name": "setCap",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "spend",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/PerUserBudget.sol": "PerUserBudget"
+		},
+		"evmVersion": "osaka",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/PerUserBudget.sol": {
+			"keccak256": "0x08af81e028c435e6568a0d1dfb5a54444051eeb4d90b93db91b50e40da81c1b9",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://8484938db366e0419e68aea00cae03b1b08d702a81eaec748b6a6a1cfcea445e",
+				"dweb:/ipfs/QmRL3NJ1UoEcS338f8itbZCG8xzKtKpJQBV4Tb8oDydpLT"
+			]
+		}
+	},
+	"version": 1
+}

@@ -6,5 +6,69 @@
         "file": "contracts/Counter.sol"
       }
     }
+  },
+  "contracts/TopDonors.sol": {
+    "__sources__": {
+      "contracts/TopDonors.sol": {
+        "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.20;\r\n\r\ncontract TopDonors {\r\n    struct Entry {\r\n        address donor;\r\n        uint256 amount;\r\n    }\r\n\r\n    Entry[] public board;\r\n    mapping(address => uint256) public donations;\r\n    uint256 public totalDonated;\r\n    address public topDonor;\r\n    uint256 public topAmount;\r\n\r\n    function donate() external payable {\r\n        require(msg.value > 0, \"Donation must be > 0\");\r\n\r\n        board.push(\r\n            Entry({\r\n                donor: msg.sender,\r\n                amount: msg.value\r\n            })\r\n        );\r\n\r\n        donations[msg.sender] += msg.value;\r\n        totalDonated += msg.value;\r\n\r\n        // 더 크면 1위 교체\r\n        if (donations[msg.sender] > topAmount) {\r\n            topDonor = msg.sender;\r\n            topAmount = donations[msg.sender];\r\n        }\r\n    }\r\n\r\n    function count() external view returns (uint256) {\r\n        return board.length;\r\n    }\r\n}",
+        "file": "contracts/TopDonors.sol"
+      }
+    }
+  },
+  "contracts/SimpleDonation.sol": {
+    "__sources__": {
+      "contracts/SimpleDonation.sol": {
+        "content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.20;\n\ncontract SimpleDonation {\n    address payable public beneficiary;\n    mapping(address => uint256) public donations;\n\n    constructor(address payable initialBeneficiary) {\n        require(initialBeneficiary != address(0));\n        beneficiary = initialBeneficiary;\n    }\n\n    function donate() external payable {\n        donations[msg.sender] += msg.value;\n    }\n\n    function withdraw() external {\n        require(msg.sender == beneficiary);\n\n        uint256 balance = address(this).balance;\n        require(balance > 0);\n\n        (bool success, ) =\n            beneficiary.call{value: balance}(\"\");\n\n        require(success, \"Withdrawal failed\");\n    }\n}",
+        "file": "contracts/SimpleDonation.sol"
+      }
+    }
+  },
+  "contracts/PerUserBudget.sol": {
+    "__sources__": {
+      "contracts/PerUserBudget.sol": {
+        "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.0;\r\n\r\ncontract PerUserBudget {\r\n    struct Allowance {\r\n        uint256 cap;\r\n        uint256 spent;\r\n    }\r\n\r\n    mapping(address => Allowance) public limits;\r\n\r\n    function setCap(uint256 capValue) external {\r\n        limits[msg.sender].cap = capValue;\r\n    }\r\n\r\n    function spend(uint256 amount) external {\r\n        Allowance storage userAllowance =\r\n            limits[msg.sender];\r\n\r\n        require(\r\n            userAllowance.spent + amount <= userAllowance.cap\r\n        );\r\n\r\n        userAllowance.spent += amount;\r\n    }\r\n\r\n    function remaining(\r\n        address account\r\n    ) external view returns (uint256) {\r\n        return limits[account].cap - limits[account].spent;\r\n    }\r\n}",
+        "file": "contracts/PerUserBudget.sol"
+      }
+    }
+  },
+  "contracts/DonorBook.sol": {
+    "__sources__": {
+      "contracts/DonorBook.sol": {
+        "content": "pragma solidity ^0.8.0;\r\n\r\ncontract DonorBook {\r\n    mapping(address => uint256) public donations;\r\n    uint256 public totalDonated;\r\n\r\n    function donate() external payable {\r\n        require(msg.value > 0, \"empty\");\r\n\r\n        donations[msg.sender] += msg.value;\r\n        totalDonated += msg.value;\r\n    }\r\n\r\n    function refund(uint256 amount) external {\r\n        require(amount == donations[msg.sender]);\r\n\r\n        donations[msg.sender] -= amount;\r\n\r\n        (bool success, ) =\r\n            payable(msg.sender).call{value: amount}(\"\");\r\n\r\n        require(success, \"Refund failed\");\r\n    }\r\n}",
+        "file": "contracts/DonorBook.sol"
+      }
+    }
+  },
+  "contracts/DonationTracker.sol": {
+    "__sources__": {
+      "contracts/DonationTracker.sol": {
+        "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.0;\r\n\r\ncontract DonationTracker {\r\n    struct Donation {\r\n        address donor;\r\n        uint256 amount;\r\n        uint64 timestamp;\r\n    }\r\n\r\n    uint256 public totalDonated;\r\n    mapping(address => uint256) public donations;\r\n    Donation[] public history;\r\n\r\n    function donate() external payable {\r\n        totalDonated += msg.value;\r\n        donations[msg.sender] += msg.value;\r\n\r\n        history.push(\r\n            Donation({\r\n                donor: msg.sender,\r\n                amount: msg.value,\r\n                timestamp: uint64(block.timestamp)\r\n            })\r\n        );\r\n    }\r\n}",
+        "file": "contracts/DonationTracker.sol"
+      }
+    }
+  },
+  "contracts/CampaignRoster.sol": {
+    "__sources__": {
+      "contracts/CampaignRoster.sol": {
+        "content": "pragma solidity ^0.8.0;\r\n\r\ncontract CampaignRoster {\r\n    uint[] public campaignIds;\r\n\r\n    function open(uint campaignId) external {\r\n        campaignIds.push(campaignId);\r\n    }\r\n\r\n    function closeLast() external {\r\n        require(campaignIds.length > 0);\r\n        campaignIds.pop();\r\n    }\r\n\r\n    function swapRemove(uint index) external {\r\n        campaignIds[index] =\r\n            campaignIds[campaignIds.length - 1];\r\n\r\n        campaignIds.pop();\r\n    }\r\n}",
+        "file": "contracts/CampaignRoster.sol"
+      }
+    }
+  },
+  "contracts/CampaignRegistry.sol": {
+    "__sources__": {
+      "contracts/CampaignRegistry.sol": {
+        "content": "pragma solidity ^0.8.0;\r\n\r\nenum Category { EDU, HEALTH, ENV, ART }\r\n\r\ncontract CampaignRegistry {\r\n    bytes32 public code;\r\n    Category public category;\r\n    uint public totalDonated;\r\n\r\n    constructor(bytes32 campaignCode, Category categoryChoice) {\r\n        code = campaignCode;\r\n        category = categoryChoice;\r\n    }\r\n\r\n    function isHealth() external view returns (bool) {\r\n        return category == Category.HEALTH;\r\n    }\r\n}",
+        "file": "contracts/CampaignRegistry.sol"
+      }
+    }
+  },
+  "contracts/CampaignBoard.sol": {
+    "__sources__": {
+      "contracts/CampaignBoard.sol": {
+        "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.0;\r\n\r\ncontract CampaignBoard {\r\n    struct Campaign {\r\n        address owner;\r\n        string title;\r\n        uint256 goal;\r\n    }\r\n\r\n    mapping(uint256 => Campaign) private boards;\r\n    mapping(uint256 => uint256) public raised;\r\n    uint256[] public campaignIds;\r\n\r\n    function create(\r\n        string calldata titleParam,\r\n        uint256 goalAmount\r\n    ) external {\r\n        uint256 campaignId = campaignIds.length;\r\n\r\n        boards[campaignId] =\r\n            Campaign(msg.sender, titleParam, goalAmount);\r\n\r\n        campaignIds.push(campaignId);\r\n    }\r\n\r\n    function donate(uint256 campaignId) external payable {\r\n        raised[campaignId] += msg.value;\r\n    }\r\n}",
+        "file": "contracts/CampaignBoard.sol"
+      }
+    }
   }
 }
